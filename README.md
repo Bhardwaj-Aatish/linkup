@@ -162,3 +162,145 @@ social-media-app/
 
 
 https://git-scm.com/cheat-sheet#prepare-to-commit
+
+
+# Social Media Platform – Full Feature List
+
+## 1. Authentication & Authorization
+- User signup with email/password (JWT + refresh token)
+- User signin with email/password
+- Google OAuth login
+- Next.js-based signin option
+- JWT stored in HTTP-only cookies / localStorage
+- Role-based access control (User, Admin)
+- Middleware for protected routes
+- Email verification flow (optional enhancement)
+
+## 2. User Profile
+- User profile page with:
+  - Avatar
+  - Cover photo
+  - Bio / personal info
+  - User posts
+  - Liked posts
+  - Media gallery (images, videos)
+- Edit profile info
+- View other user profiles
+
+## 3. Social Graph: Friends & Blocking
+- Send friend request
+- Accept / reject friend request
+- Display notifications for friend requests
+- Block a user (full restriction):
+  - Cannot message
+  - Cannot send friend request
+  - Cannot view posts/profile
+  - Hidden from search and suggestions
+
+## 4. Newsfeed & Posts
+- Create post (text, images, videos)
+- Display all posts on home feed
+- Like a post
+- Comment on a post
+- Trending posts section:
+  - Based on like count or engagement
+- Search users via search bar
+- Pagination for feed and comments
+- Redis-based caching for trending posts (recommended)
+
+## 5. Media Handling
+- Upload images & videos
+- Cloudinary/S3 upload integration
+- Serve optimized media URLs
+
+## 6. Messaging System
+- One-to-one messaging
+- Real-time chat using WebSockets/Socket.IO
+- "Seen" or "Delivered" indicators (optional)
+- Message list + chat UI
+
+## 7. Payment & Verification (Twitter Blue Tick)
+- Payment integration (Stripe/Razorpay)
+- Premium subscription for blue tick
+- Payment webhook handling
+- Verification workflow:
+  - Sanity checks before granting blue tick:
+    - Valid email
+    - Completed profile
+    - No abusive history
+  - Update `isVerified = true` only after successful checks
+- Show blue tick on profile & posts after verification
+
+## 8. Notifications System
+- Friend request notifications
+- Comment notifications
+- Like notifications
+- Verification status notifications
+- Real-time notification updates (WebSocket)
+
+## 9. Admin Panel (Admin UI)
+- Admin login (RBAC)
+- View list of all users
+- Ban/abandon/delete user accounts
+- Review flagged content (if added later)
+- System analytics dashboard (optional)
+- Audit logs (optional)
+
+## 10. Backend Architecture (Node.js + Express)
+- Controllers, services, repositories separated
+- Input validation with middleware
+- Error handling middleware
+- Logging with Winston/Morgan
+- API rate limiting (recommended)
+- Modular route grouping
+- Database indexing for fast queries
+- Queues (BullMQ/RabbitMQ) for:
+  - Notifications
+  - Verification workflows
+  - Media processing
+
+## 11. Frontend Architecture (React)
+- Component-based architecture
+- Global state management (Redux/Zustand/Recoil)
+- Protected routes
+- Responsive UI/UX
+- Reusable form components
+- Skeleton loading states
+
+## 12. Deployment & DevOps
+- Docker container for frontend
+- Docker container for backend
+- NGINX reverse proxy
+- Kubernetes deployment:
+  - Deployments
+  - Services
+  - Ingress
+  - ConfigMaps & Secrets
+  - Horizontal Pod Autoscaler
+- CI/CD pipeline (GitHub Actions optional)
+- Environment variable handling
+
+## 13. Testing
+- Jest unit tests
+- Supertest API integration tests
+- Mocking database & services
+- E2E tests (Playwright/Cypress optional)
+
+## 14. Database (MongoDB/Postgres)
+- Users
+- Posts
+- Likes
+- Comments
+- Messages
+- Friend requests
+- Blocks
+- Notifications
+- Transactions/Payments
+- Admin logs
+- Indexes for search & queries
+
+## 15. Other Optional Enhancements
+- Dark mode
+- Activity log for user
+- Post analytics
+- Hashtags & trending topics

@@ -9,13 +9,56 @@
   pointer-events: none !important;
 }
 
+/* 
+THEME USAGE GUIDE:
+
+--color-bg-primary        : page background, main app shell, min-h-screen, body background
+--color-bg-card           : cards, auth panels, modal surfaces, dropdown surfaces, sheet surfaces
+--color-primary           : brand accent color, buttons bg (primary btn), links, icons highlight, toggle active, focus ring, outline color on focus states
+--color-text-secondary    : subtext, helper text, labels, muted descriptions, paragraph text
+--color-text-placeholder  : input placeholders ONLY
+--color-border            : subtle borders (inputs, card borders, separators, table cell borders, bottom border for headers)
+
+TEXT COLOR RULE:
+ - default main text → white always
+ - h1 / headings → white
+ - secondary text → var(--color-text-secondary)
+ - placeholder text → var(--color-text-placeholder)
+
+BORDERS:
+ - all borders default → var(--color-border)
+ - on focus ring → use var(--color-primary) only
+
+BUTTONS:
+ - primary button bg → var(--color-primary)
+ - primary button text → white
+ - primary button hover → slightly lighter var(--color-primary) (e.g brighten using opacity/tint)
+ - secondary button (if used) → transparent bg, border var(--color-border), text white
+
+OUTLINE / RING:
+ - focus:ring → var(--color-primary)
+ - outline color → var(--color-primary)
+
+BACKGROUND:
+ - page main background → var(--color-bg-primary)
+ - card background → var(--color-bg-card)
+
+INPUTS:
+ - background: var(--color-bg-card)
+ - border: var(--color-border)
+ - text: white
+ - placeholder: var(--color-text-placeholder)
+
+*/
+
 
 @theme {
-  --color-myteal: #1B3C53;
-  --color-mycyan: #234C6A;
-  --color-myslate: #456882;
-  --color-mystone: #D2C1B6 ;
-  --color-mystone2: #bda896;  
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-accent-primary: #06b6d4;
+  --color-text-secondary: #94a3b8;
+  --color-text-teritary: #64748b; 
+  --color-border:  #334155;
 }
 
 /* :root {

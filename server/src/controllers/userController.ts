@@ -2,6 +2,7 @@ import { userModel } from "../models/user.js";
 import {z} from "zod"
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt";
+import { postModel } from "../models/post.js";
 
 const JWT_SECRET='myappsecret'
 
@@ -43,7 +44,8 @@ export const signup = async (req: any ,res: any) => {
 
 export const signin = async (req: any, res: any) => {
   try {
-    validateUser(req, res);
+    const isValidData = validateUser(req, res);
+    if(!isValidData) return;
     const {name, email, password} = req.body;
     const user = await userModel.findOne({email}) as any;
     const isValidPassword = await bcrypt.compare(password, user.password)
@@ -59,15 +61,41 @@ export const signin = async (req: any, res: any) => {
 }
 
 
-export const profile = async (req: any, res: any) => {
+// fetch the comments in the post too in future.
+export const getSelfProfle = async (req: any, res: any) => {
   try {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
-
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const userinfo = await userModel.findById((decoded as any).id)
-    res.send(userinfo)
+    const userInfo = await userModel.findById(req.userId).select('-password').lean();
+    const allUserPosts = await postModel.find({author: req.userId}).sort({createdAt: -1}).lean();
+    const likedPosts = await postModel.find({like: req.userId}).sort({createdAt: -1}).lean();
+    const mediaUrls = allUserPosts.flatMap(post => post.mediaUrl);
+    const response = {userInfo, allUserPosts, likedPosts, mediaUrls};
+    res.status(200).json(response);
   } catch (error) {
+    res.status(500).json({message: 'Server error', errorMessage: error});
+  }
+}
+
+
+export const modifySelfProfile = async (req: any, res: any) => {
+  try {
+    const userInfo  = await userModel.findOneAndUpdate({_id: req.userId}, req.body, {new: true})
+    res.status(201).json({userInfo: userInfo})
+  } catch (error) {
+    console.error("Error while modify the profile code")
     res.send(error)
   }
 }
+
+// 
+
+
+export const fetchAllUser = async (req: any, res: any) => {
+  try {
+    const allUser = await userModel.find().select('name email profilePhoto').lean();
+    res.status(200).json(allUser)
+  } catch (error) {
+    res.status(500).json({message: 'Error while fetching user data'}, error)
+  }
+}
+ 
+
