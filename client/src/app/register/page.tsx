@@ -4,9 +4,9 @@ import axios from "axios"
 import { useRouter } from "next/navigation"
 
 interface SignUpProps {
-	name: String,
-	email: String,
-	password: String
+	name: string,
+	email: string,
+	password: string
 }
 
 export default function Register() {

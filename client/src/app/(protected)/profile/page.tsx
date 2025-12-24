@@ -1,7 +1,6 @@
 "use client"
 import Navbar from "@/components/Navbar";
 import SideBar from "@/components/Sidebar"
-import ProfileSection from "@/components/ProfileSection";
 import UserProfile from "@/components/UserProfile";
 import UserContent from "@/components/UserContent";
 import { useEffect, useState } from "react";

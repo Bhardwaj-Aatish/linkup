@@ -5,11 +5,11 @@ import { redirect, useRouter } from 'next/navigation'
 import AuthForm from '@/components/AuthForm'
 
 interface SigninProps {
-  name: String,
-  email: String,
-  password: String
+  name: string,
+  email: string,
+  password: string
 }
-export default function login() {
+export default function Login() {
   const router = useRouter()
 
   const handleRegisterRedirecting = () => {

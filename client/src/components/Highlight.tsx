@@ -25,7 +25,7 @@ const Highlight = () => {
       
     return (
         <div className="highlight-container border rounded-2xl border-border">
-            <div className="highlight-container-heading p-3 text-xl font-extrabold">Today's news</div>
+            <div className="highlight-container-heading p-3 text-xl font-extrabold">Today news</div>
             {HighlightItems}
         </div>
     )
