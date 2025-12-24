@@ -1,5 +1,6 @@
 "use client"
 import AuthForm from "@/components/AuthForm"
+import apiClient from "@/lib/axiosInstance"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 
@@ -18,11 +19,11 @@ export default function Register() {
 
 	const onSignUp = async ({ name, email, password }: SignUpProps) => {
 		try {
-			const response = await axios.post('http://localhost:3001/api/users/signup', {
+			const response = await apiClient.post('api/users/signup', {
 				name,
 				email,
 				password
-			})
+			  })
 
 			if (response.status !== 201) {
 				throw new Error("Error in signup")

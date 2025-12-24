@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+    expose:
+      - "3000"
+  backend:
+    build:
+      context: ./server
+    expose:
+      - "3001"
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
