@@ -1,14 +1,12 @@
-version: '3.8'
-
 services:
   frontend:
-    image: aatishbh/frontend:1.0.0
+    image: aatishbh/frontend:1.0.1
     build:
       context: ./client
     expose:
       - "3000"
   backend:
-    image: aatishbh/backend:1.0.0
+    image: aatishbh/backend:1.0.1
     build:
       context: ./server
     env_file:
@@ -16,7 +14,7 @@ services:
     expose:
       - "3001"
   nginx:
-    image: aatishbh/nginx:1.0.0
+    image: aatishbh/nginx:1.0.1
     build:
       context: ./nginx
     ports:
