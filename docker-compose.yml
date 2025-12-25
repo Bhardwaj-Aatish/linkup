@@ -9,6 +9,8 @@ services:
   backend:
     build:
       context: ./server
+    env_file:
+      - './server/.env'
     expose:
       - "3001"
   nginx:

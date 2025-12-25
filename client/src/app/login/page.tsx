@@ -18,7 +18,7 @@ export default function Login() {
 
   const onSignIn = async ({ name, email, password }: SigninProps) => {
     try {
-      const response = await apiClient.post('api/users/signin', {
+      const response = await apiClient.post('/api/users/signin', {
         name,
         email,
         password

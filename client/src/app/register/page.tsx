@@ -19,7 +19,7 @@ export default function Register() {
 
 	const onSignUp = async ({ name, email, password }: SignUpProps) => {
 		try {
-			const response = await apiClient.post('api/users/signup', {
+			const response = await apiClient.post('/api/users/signup', {
 				name,
 				email,
 				password
