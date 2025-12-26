@@ -3,8 +3,6 @@ name: Release
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
 
 env:
   IMAGE_TAG: ${{ github.sha }}
