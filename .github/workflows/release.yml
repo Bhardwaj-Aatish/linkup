@@ -14,6 +14,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
+    # ---------- BACKEND ----------
+      - name: Build Backend
+        working-directory: server
+        run: |
+          npm ci
+          npm run build
+
+    # ---------- FRONTEND ----------
+      - name: Build Frontend
+        working-directory: client
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
+        run: |
+          npm ci
+          npm run build
+
       # DockerHub login
       - name: DockerHub Login
         uses: docker/login-action@v3
