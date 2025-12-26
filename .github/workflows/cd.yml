@@ -18,7 +18,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd your-project
+            cd linkup
+            git pull
             export IMAGE_TAG=${{ github.sha }}
             docker compose pull
             docker compose up -d
