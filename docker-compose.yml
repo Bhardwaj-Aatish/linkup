@@ -1,22 +1,15 @@
 services:
   frontend:
-    image: aatishbh/frontend:1.0.4
-    build:
-      context: ./client
-    expose:
-      - "3000"
+    image: aatishbh/frontend:${IMAGE_TAG}
+    restart: always
   backend:
-    image: aatishbh/backend:1.0.4
-    build:
-      context: ./server
+    image: aatishbh/backend:${IMAGE_TAG}
+    restart: always
     env_file:
       - './server/.env'
-    expose:
-      - "3001"
   nginx:
-    image: aatishbh/nginx:1.0.4
-    build:
-      context: ./nginx
+    image: aatishbh/nginx:${IMAGE_TAG}
+    restart: always
     ports:
       - "80:80"
     depends_on:

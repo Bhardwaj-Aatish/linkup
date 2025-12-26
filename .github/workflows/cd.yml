@@ -1,0 +1,26 @@
+name: CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd your-project
+            export IMAGE_TAG=${{ github.sha }}
+            docker compose pull
+            docker compose up -d

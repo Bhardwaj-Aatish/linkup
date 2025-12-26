@@ -1,0 +1,59 @@
+# .github/workflows/release.yml
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # DockerHub login
+      - name: DockerHub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      # Enable Buildx (REQUIRED for --platform)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ---------- BACKEND ----------
+      - name: Build Backend Image
+        run: |
+          docker build \
+            --platform linux/amd64 \
+            -t aatishbh/backend:${IMAGE_TAG} \
+            ./server
+
+      # ---------- FRONTEND ----------
+      - name: Build Frontend Image
+        run: |
+          docker build \
+            --platform linux/amd64 \
+            -t aatishbh/frontend:${IMAGE_TAG} \
+            ./client
+
+      # ---------- NGINX ----------
+      - name: Build Nginx Image
+        run: |
+          docker build \
+            --platform linux/amd64 \
+            -t aatishbh/nginx:${IMAGE_TAG} \
+            ./nginx
+
+      # ---------- PUSH ----------
+      - name: Push Images
+        run: |
+          docker push aatishbh/backend:${IMAGE_TAG}
+          docker push aatishbh/frontend:${IMAGE_TAG}
+          docker push aatishbh/nginx:${IMAGE_TAG}
