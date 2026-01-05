@@ -4,7 +4,10 @@ const {Schema} = mongoose;
 const postSchema = new Schema({
     author: {type: Schema.Types.ObjectId, ref: "user", required: true},
     caption: {type: String, default: ""},
-    mediaUrl: [{type:String}], 
+    mediaUrl: [{
+       type: {type: String, enum: ["video", "image"], required: true},
+       url: {type: String, required: true} 
+    }],
     like: [{type: Schema.Types.ObjectId, ref: 'user'}]
 }, {timestamps: true});
 

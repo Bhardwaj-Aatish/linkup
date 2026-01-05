@@ -1,13 +1,14 @@
 import express from 'express';
+import multer from 'multer'
 import authMiddleware from '../middleware/authMiddleware.js';
 import { createPost, getPostsUsingLookup, likePost, unlikePost, deleteComment, createComment, deletePost, getComment, getPosts } from '../controllers/postController.js';
 
 const postRouter = express.Router();
-
+const upload = multer({dest: 'uploads/'})
 postRouter.use(authMiddleware);
 
 //posts
-postRouter.post('/create', createPost);
+postRouter.post('/create', upload.array('fileData', 12),  createPost);
 postRouter.get('/all', getPosts); // along with the comments
 postRouter.delete('/delete_post/:post_id', deletePost); // will not provide the option in the mvp
 

@@ -8,6 +8,7 @@ import ReactionComponent from "./ReactionComponent";
 import { useEffect } from "react";
 import apiClient from "@/lib/axiosInstance";
 import { useAuth } from "@/context/AuthContext";
+import MediaComponent from "./MediaComponent";
 
 interface PostContainerProps {
     name: string;
@@ -58,6 +59,7 @@ const PostContainer = ({ author, createdAt, caption, mediaUrl, like, comments, _
                     className="object-cover border rounded-full border-border"
                     alt="/default.jpg"
                 />
+
             </div>
             <div className="post-message flex-1 flex-col">
                 <div className="author-info flex flex-col">
@@ -68,16 +70,7 @@ const PostContainer = ({ author, createdAt, caption, mediaUrl, like, comments, _
                     <span className="text-text-teritary text-xs">{author?.email}</span>
                 </div>
                 <div className="py-2">{caption}</div>
-                {mediaUrl.length > 0 && (
-                    <div className="relative w-full h-[300px] md:h-[400px] lg:h-[400px] mt-2 flex">
-                        <Image
-                            src={mediaUrl[0]}
-                            fill={true}
-                            className="border rounded-lg object-cover"
-                            alt="post"
-                        />
-                    </div>
-                )}
+                <MediaComponent media={mediaUrl} height={400} />
 
                 <div className="post-reaction flex justify-around items-center p-2">
                     <ReactionComponent Icon={ThumbUpIcon} label={like?.length} onClick={likePost} />

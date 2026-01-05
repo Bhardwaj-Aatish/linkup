@@ -3,11 +3,17 @@ import { postModel } from "../models/post.js"
 
 export const createPost = async (req: any, res: any) => {
     try {
-        const {caption, mediaUrl} = req.body || {};
+        const {caption} = req.body || {};
+        const media = req.files;
+        const mediaUrl = media?.map((file: any) => ({
+            type: file.mimetype.startsWith("video") ? "video" : "image",
+            url: `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
+        })) || [];
         // make sure either of caption or media is present, otherwise someone can create post
-        if(!caption && !mediaUrl) {
+        if(!caption && mediaUrl.length === 0) {
             return res.status(400).json({message: "Can't create empty post"});
         }
+
         const response = await postModel.create({author: req.userId, caption, mediaUrl, like: []});
         const postWithAuthor = await postModel.findById(response._id).populate("author", "name email profilePhoto");
         const post = {
