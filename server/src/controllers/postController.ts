@@ -1,14 +1,24 @@
 import { commentModel } from "../models/comment.js";
 import { postModel } from "../models/post.js"
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
 export const createPost = async (req: any, res: any) => {
     try {
         const {caption} = req.body || {};
-        const media = req.files;
-        const mediaUrl = media?.map((file: any) => ({
-            type: file.mimetype.startsWith("video") ? "video" : "image",
-            url: `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
-        })) || [];
+        const media = req.files || [];
+        
+        let mediaUrl: any = [];
+
+        for(const file of media) {
+            const result = await uploadOnCloudinary(file.path);
+            if(result) {
+                mediaUrl.push({
+                    type: file.mimetype.startsWith("video") ? "video" : "image",
+                    url: result.secure_url
+                })
+            }
+        }
+
         // make sure either of caption or media is present, otherwise someone can create post
         if(!caption && mediaUrl.length === 0) {
             return res.status(400).json({message: "Can't create empty post"});

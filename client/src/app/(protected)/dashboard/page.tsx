@@ -14,7 +14,6 @@ const Dashboard = () => {
     useEffect(() =>  {
       const fetchPost = async () => {
         const posts = await apiClient.get('/api/posts/all');
-        console.log("working here fetch posts", posts)
         setPosts(posts.data.posts)
       }
       fetchPost()
