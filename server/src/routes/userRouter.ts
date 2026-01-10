@@ -1,6 +1,7 @@
 import express from 'express'
 import { getSelfProfle, signin, signup, modifySelfProfile, fetchAllUser } from '../controllers/userController.js'
 import authMiddleware from '../middleware/authMiddleware.js';
+import uploadFile from '../middleware/multerMiddleware.js';
 
 const userRouter = express.Router();
 
@@ -12,6 +13,7 @@ userRouter.use(authMiddleware);
 userRouter.get('/all_user', fetchAllUser)
 
 userRouter.get('/me', getSelfProfle) // get the user comments, liked comments, with the media url 
-userRouter.patch('/me', modifySelfProfile) // modify only the userinfo
+
+userRouter.patch('/me', uploadFile.fields([{name: 'profilePhoto', maxCount: 1}, {name: 'coverPhoto', maxCount: 1}]), modifySelfProfile) // modify only the userinfo
 
 export default userRouter;

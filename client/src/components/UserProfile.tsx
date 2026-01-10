@@ -1,9 +1,9 @@
 import Button from "./Button";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
-import { Api, FilePresent } from "@mui/icons-material";
+import EditIcon from '@mui/icons-material/Edit';
 import { FormRenderer, FormSchema } from "./FormRenderer";
 import apiClient from "@/lib/axiosInstance";
 
@@ -30,9 +30,7 @@ type ProfileForm = {
     name: string,
     email: string,
     bio: string,
-    location: string,
-    coverPhoto: string,
-    profilePhoto: string
+    location: string
 }
 const profileSchema = {
     name: {
@@ -54,38 +52,29 @@ const profileSchema = {
         label: "Location", 
         type: "text",
         placeholder: "Enter location"
-    },
-    coverPhoto: {
-        label: "Cover Photo Url",
-        type: "text",
-        placeholder: "Enter url of coverPhoto"
-    },
-    profilePhoto : {
-        label: "Profle photo url",
-        type: "text",
-        placeholder: "Enter url of profilePhoto"
     }
-
 } satisfies FormSchema<keyof ProfileForm> 
 
 const UserProfile = ({ userInfo, onEditProfile }: userProfileType) => {
-    const profilePhotoUrl = userInfo?.profilePhoto && userInfo?.profilePhoto.length > 0 ? userInfo.profilePhoto : 'default.jpg';
-    const coverPhotoUrl = userInfo?.profilePhoto && userInfo?.profilePhoto.length > 0 ? userInfo.coverPhoto : 'post1.webp';
+    const [localCoverPhotoUrl, setLocalCoverPhotoUrl] = useState<any>(null); 
+    const [localProfilePhotoUrl, setLocalProfilePhotoUrl] = useState<any> (null);
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
     const [form, setForm] = useState<ProfileForm>(({
         name: "",
         email: "",
         bio: "",
         location: "",
-        coverPhoto: "",
-        profilePhoto: "",
     }))
+    const coverPhotoFileRef = useRef<HTMLInputElement | null > (null);
+    const profilePhotoFileRef = useRef<HTMLInputElement | null > (null);
+
+    const coverPhotoUrl = localCoverPhotoUrl ?? userInfo?.coverPhoto ?? null;
+    const profilePhotoUrl =localProfilePhotoUrl ??  userInfo?.profilePhoto;
+
 
     const handleSave = async () => {
-        console.log("working here handle save", form)
         const response = await apiClient.patch('/api/users/me', form)
         if(response.status === 201) {
-            console.log("working here handle save 2", response)
             onEditProfile(response?.data?.userInfo)
         }
         // make the api call
@@ -98,20 +87,62 @@ const UserProfile = ({ userInfo, onEditProfile }: userProfileType) => {
             name: userInfo.name,
             email: userInfo.email,
             bio: userInfo.bio,
-            location: userInfo.location,
-            coverPhoto: userInfo.coverPhoto,
-            profilePhoto: userInfo.profilePhoto
+            location: userInfo.location
         })
         setIsEditProfileModalOpen(true)
     }
 
+    const modifyProfile = async (formData: any) => {
+        const response = await apiClient.patch('/api/users/me', formData);
+        if(response.status === 201) {
+            onEditProfile(response?.data?.userInfo);
+        }
+    }
+
+    const handleCoverPhotoUpdate = (e : any) => {
+        if(e.target.files.length > 0) {
+            const url = URL.createObjectURL(e.target.files[0]);
+            setLocalCoverPhotoUrl(url);
+            const formData = new FormData();
+            formData.append("coverPhoto", e.target.files[0]);
+            modifyProfile(formData);
+            
+        }
+    }
+
+    const handleProfilePhotoUpdate = (e: any) => {
+        if(e.target.files.length > 0) {
+            const url = URL.createObjectURL(e.target.files[0]);
+            setLocalProfilePhotoUrl(url)
+            const formData = new FormData();
+            formData.append("profilePhoto", e.target.files[0]); 
+            modifyProfile(formData);
+        }
+    }
+
+    useEffect(() => {
+        return() => {
+            if(localCoverPhotoUrl) {
+                URL.revokeObjectURL(localCoverPhotoUrl)
+            }
+            if(localProfilePhotoUrl) {
+                URL.revokeObjectURL(localProfilePhotoUrl)
+            }
+        }
+    }, [localCoverPhotoUrl, localProfilePhotoUrl])
+
 
     return (
         <div className="user-profile-container w-full">
-            <div className="w-full aspect-3/1 border-white relative">
-                <img src={coverPhotoUrl} alt="aatish sorry" className="w-full h-full object-cover bg-bg-secondary" />
-                <div className="absolute bottom-0 translate-y-1/2 p-4">
-                    <img src={profilePhotoUrl} alt="" className="w-25 sm:w-30 md:w-35 object-cover rounded-full" />
+            <div className="w-full aspect-3/1 border-white relative bg-bg-secondary">
+                <button onClick={() => coverPhotoFileRef?.current?.click()} className="absolute p-2 rounded-full top-0 right-0 translate-y-1/8 -translate-x-1/8 bg-black/50  hover:cursor-pointer hover:bg-black">
+                  <EditIcon/>
+                  <input type="file" accept="image/*" className="hidden" ref={coverPhotoFileRef} onChange={handleCoverPhotoUpdate}/>
+                </button>
+                {coverPhotoUrl?.length>0 &&  <img src={coverPhotoUrl} alt="aatish sorry" className="w-full h-full object-cover bg-bg-secondary" />}
+                <div className="absolute w-25 sm:w-30 md:w-35 bottom-0 overflow-hidden aspect-square translate-y-1/2 translate-x-1/10 hover:cursor-pointer rounded-full bg-bg-secondary" >
+                    <input type="file" accept="image/*" className="hidden" ref={profilePhotoFileRef} onChange={handleProfilePhotoUpdate}/>
+                    {profilePhotoUrl?.length > 0 && <img src={profilePhotoUrl} alt="" className="w-full h-full rounded-full object-cover" tabIndex={0} onClick={() => profilePhotoFileRef?.current?.click()}/>}
                 </div>
             </div>
 

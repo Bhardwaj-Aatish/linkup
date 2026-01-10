@@ -3,6 +3,7 @@ import {z} from "zod"
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt";
 import { postModel } from "../models/post.js";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
 const JWT_SECRET='myappsecret'
 
@@ -78,7 +79,23 @@ export const getSelfProfle = async (req: any, res: any) => {
 
 export const modifySelfProfile = async (req: any, res: any) => {
   try {
-    const userInfo  = await userModel.findOneAndUpdate({_id: req.userId}, req.body, {new: true})
+    let fileData = {};
+    if(req.files && req.files['profilePhoto'] && req.files['profilePhoto'][0]) {
+      const pRes = await uploadOnCloudinary(req.files['profilePhoto'][0].path);
+      fileData = {
+        ...fileData,
+        profilePhoto: pRes?.secure_url
+      }
+    }
+
+    if(req.files && req.files['coverPhoto'] && req.files['coverPhoto'][0]) {
+      const cRes = await uploadOnCloudinary(req.files['coverPhoto'][0].path);
+      fileData = {
+        ...fileData,
+        coverPhoto: cRes?.secure_url
+      }
+    }    
+    const userInfo  = await userModel.findOneAndUpdate({_id: req.userId}, {...req.body, ...fileData}, {new: true})
     res.status(201).json({userInfo: userInfo})
   } catch (error) {
     console.error("Error while modify the profile code")

@@ -14,5 +14,5 @@ export {followerModel};
 
 
 //follower, one who is following , a follows b , 
-// a is the follower 
+// a is the follower
 // b is the following 
