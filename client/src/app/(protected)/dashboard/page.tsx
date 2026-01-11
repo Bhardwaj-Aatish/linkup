@@ -6,6 +6,7 @@ import CreatePost from '@/components/CreatePost';
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/axiosInstance';
 import { useAuth } from '@/context/AuthContext';
+import { CommentsDisabled } from '@mui/icons-material';
 
 const Dashboard = () => {
   const {user} = useAuth();
@@ -23,8 +24,23 @@ const Dashboard = () => {
       setPosts((prevPosts: any) => [post, ...prevPosts])
     }
 
-    const handleCreateComment = (postId: string, userId: string) => {
-      
+    const handleCreateComment = (comment: any) => {
+      setPosts((prevPosts: any) => {
+        const updatedPost = posts.map((post: any) => {
+          if(post._id !== comment.postId) return post;
+          
+          return {
+            ...post,
+            comments: [
+              comment,
+              ...post.comments,
+            ]
+          }
+        });
+        return updatedPost;
+      })
+      console.log("halla bol handle createcomment", comment);
+
     }
 
     const printPost = (postId: string) => {
@@ -65,8 +81,19 @@ const Dashboard = () => {
       })
     }
     
-    const handleDeleteComment = (postId: string, userId: string, commentId: string) => {
+    const handleDeleteComment = (postId: string, commentId: string) => {
+      console.log("handle delete comment")
+      setPosts((prevPosts: any) => {
+        const updatedPost = prevPosts.map((post: any) => {
+          if(post._id !== postId) return post;
 
+          return {
+            ...post,
+            comments: post.comments.filter((comment: any) => commentId !== comment?._id)
+          }
+        })
+        return updatedPost;
+      })
     }
 
 

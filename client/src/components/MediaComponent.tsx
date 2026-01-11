@@ -23,7 +23,7 @@ const MediaComponent = ({ media, height = 400 }: MediaComponent) => {
 
   return (
     <div
-      className="relative w-full mt-2 rounded-lg overflow-hidden"
+      className="relative w-full mt-2 rounded-lg overflow-hidden flex"
       style={{ height }}
     >
       {item.type === 'video' ? (
@@ -33,12 +33,11 @@ const MediaComponent = ({ media, height = 400 }: MediaComponent) => {
           className="w-full h-full object-contain"
         />
       ) : (
-        <Image
+        <img
           src={item.url}
-          fill
-          className="object-cover"
+          className="object-scale-down border-border border-2 rounded-lg"
           alt="post media"
-          sizes="(max-width: 768px) 100vw, 700px"
+          sizes="(max-width: 800px) 100vw, 800px"
         />
       )}
 

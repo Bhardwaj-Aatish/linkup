@@ -1,3 +1,4 @@
+import { success } from "zod";
 import { commentModel } from "../models/comment.js";
 import { postModel } from "../models/post.js"
 import uploadOnCloudinary from "../utils/cloudinary.js";
@@ -41,7 +42,7 @@ export const getPosts = async (req: any, res: any) => {
         const posts = await postModel.find().sort({createdAt: -1}).populate('author', 'name email profilePhoto');
         const response = [];
         for (const post of posts) {
-            const comments = await commentModel.find({postId: post._id}).sort({createdAt: -1});
+            const comments = await commentModel.find({postId: post._id}).sort({createdAt: -1}).populate('author', 'name email profilePhoto');
             const currentPost = post.toObject();
             response.push({comments, ...currentPost});
         }
@@ -183,7 +184,8 @@ export const createComment = async (req: any, res: any) => {
             return res.status(400).json({message: 'No comment text is provided'})
         }
         const comment = await commentModel.create({author, text, postId});
-        res.status(201).json({comment})
+        const populatedComment = await comment.populate('author', '_id name email profilePhoto');
+        res.status(201).json({comment: populatedComment});
     } catch (error) {
       res.status(500).json({message: 'Server error', errorMessage: error})        
     }
@@ -192,12 +194,17 @@ export const createComment = async (req: any, res: any) => {
 export const deleteComment = async (req: any, res: any) => {
     try {
         const commentId = req.params.comment_id;
-        const response = commentModel.findByIdAndDelete(commentId);
-
+        const postId = req.params.post_id;
+        const response = await commentModel.findByIdAndDelete(commentId);
         if(!response) {
             return res.status(404).json({message: 'Comment not found'})
         }
-        res.status(204).send()
+        const message = {
+            "success": "true",
+            "commentId": commentId,
+            "postId": postId,
+        }
+        res.status(200).send(message);
     } catch (error) {
         res.status(500).json({message: 'Server', errorMessage: error})
     }
@@ -206,7 +213,7 @@ export const deleteComment = async (req: any, res: any) => {
 
 export const getComment = async (req: any, res: any) => {
     try {
-        const comments = await commentModel.find().sort({createdAt: -1})
+        const comments = await commentModel.find().sort({createdAt: -1}).populate('author', 'name email profilePhoto')
         res.status(200).json(comments)
     } catch (error) {
         res.status(500).json({message: 'Server', errorMessage: error})
