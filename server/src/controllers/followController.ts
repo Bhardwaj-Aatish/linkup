@@ -51,11 +51,14 @@ export const unfollowUser  = async (req: any, res: any) => {
         }
 
         const response = await followerModel.deleteOne({follower, following});
+        if(response.deletedCount < 0) {
+            return res.status(400).json({message: "Error while unfollowing"})
+        }
         userFollower.followingCount-=1;
         userFollowing.followerCount-=1;
         await Promise.all([userFollower.save(), userFollowing.save()]);
         res.status(200).json({message: "Succussfully unfollowed", response});
     } catch (error) {
-        res.status(500).json("Error while unfollowing", error)
+        res.status(500).json({message: "Error while unfollowing", error})
     }
 }

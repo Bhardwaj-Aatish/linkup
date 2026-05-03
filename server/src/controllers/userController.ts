@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { postModel } from "../models/post.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 
-const JWT_SECRET='myappsecret'
+
 
 const validateUser = (req: any, res: any) => {
   const user = z.object({
@@ -49,11 +49,15 @@ export const signin = async (req: any, res: any) => {
     if(!isValidData) return;
     const {name, email, password} = req.body;
     const user = await userModel.findOne({email}) as any;
+    
+    if(!user) {
+      return res.status(404).json({message: "User not found"})
+    }
     const isValidPassword = await bcrypt.compare(password, user.password)
     if(!isValidPassword) {
-      res.status(402).json({message: "Invalid password"})
+      return res.status(402).json({message: "Invalid password"})
     }
-    const token = jwt.sign({id: user._id}, JWT_SECRET)
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET as string)
     res.status(201).json({message: "Signin successfully", user, token})
   } catch {
     console.error("error while signing in")

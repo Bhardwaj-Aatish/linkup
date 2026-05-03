@@ -1,10 +1,10 @@
 import PostContainer from "./PostContainer";
 
 const Feed = ({posts, onLikePost, onDeletePost, onDeleteComment, onCreateComment}: any ) => {
-    const postItems = posts?.map((item: any, index: any) => {
+    const postItems = posts?.map((item: any) => {
         console.log("working feed here", item)
         return (
-            <PostContainer key={index} onLikePost={onLikePost} onDeletePost={onDeletePost} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} {...item}/>
+            <PostContainer key={item._id} onLikePost={onLikePost} onDeletePost={onDeletePost} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} {...item}/>
         )
     })
     return (

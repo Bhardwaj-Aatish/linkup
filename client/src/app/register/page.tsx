@@ -1,7 +1,6 @@
 "use client"
 import AuthForm from "@/components/AuthForm"
 import apiClient from "@/lib/axiosInstance"
-import axios from "axios"
 import { useRouter } from "next/navigation"
 
 interface SignUpProps {

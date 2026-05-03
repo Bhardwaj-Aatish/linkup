@@ -6,7 +6,6 @@ import CreatePost from '@/components/CreatePost';
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/axiosInstance';
 import { useAuth } from '@/context/AuthContext';
-import { CommentsDisabled } from '@mui/icons-material';
 
 const Dashboard = () => {
   const {user} = useAuth();
@@ -43,13 +42,13 @@ const Dashboard = () => {
 
     }
 
-    const printPost = (postId: string) => {
-      posts.map((post: any) => {
-        if(post._id === postId) {
-          console.log("working like on this post", post)
-        }
-      })
-    }
+    // const printPost = (postId: string) => {
+    //   posts.map((post: any) => {
+    //     if(post._id === postId) {
+    //       console.log("working like on this post", post)
+    //     }
+    //   })
+    // }
 
     const handleLikePost = (postId: string) => {
       setPosts((prevPosts: any) => {

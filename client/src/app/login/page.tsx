@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import apiClient from '@/lib/axiosInstance'
-import { redirect, useRouter } from 'next/navigation'
+import {useRouter } from 'next/navigation'
 import AuthForm from '@/components/AuthForm'
 
 interface SigninProps {

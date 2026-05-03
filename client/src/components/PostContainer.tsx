@@ -151,7 +151,7 @@ const PostContainer = ({ author, createdAt, caption, mediaUrl, like, comments, _
     const [deletePostWarning, setDeletePostWarning] = useState(false);
     const [isEditPostPopoverOpen, setIsEditPostPopoverOpen] = useState(false);
     const anchorRef = useRef(null);
-    const avatarUrl = author?.profilePhoto ?? '/default.jpg'
+    const avatarUrl = author?.profilePhoto && author.profilePhot !== '' ? author.profilePhoto :  '/default.jpg'
     const [showComment, setShowComment] = useState(false);
 
 

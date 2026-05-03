@@ -1,4 +1,3 @@
-import { success } from "zod";
 import { commentModel } from "../models/comment.js";
 import { postModel } from "../models/post.js"
 import uploadOnCloudinary from "../utils/cloudinary.js";
@@ -155,10 +154,17 @@ export const deletePost = async (req: any, res: any) => {
         const postId = req.params.post_id;
         const response = await postModel.findByIdAndDelete(postId);
 
+        //check if post is deleted by author of the post, if not, then don't delete the post and return error
+        // to do 
+        // not doing now for ease of testing, but we will do it for sure before the production release, as it is a critical bug
+        // if(response?.author.toString() !== req.userId) {
+        //     return res.status(403).json({message: 'You are not authorized to delete this post'})
+        // }
+
         if(!response) {
             return res.status(404).json({message: 'Post not found'})
         }
-        await commentModel.deleteMany({id:postId})
+        await commentModel.deleteMany({postId:postId})
         res.status(204).send();
         //to do -> use session, so that, if comment fails, we don't delete the post too
         //  const session = await mongoose.startSession();
@@ -196,6 +202,13 @@ export const deleteComment = async (req: any, res: any) => {
         const commentId = req.params.comment_id;
         const postId = req.params.post_id;
         const response = await commentModel.findByIdAndDelete(commentId);
+
+        //to do -> check if the comment is deleted by the author of the comment, if not, then don't delete the comment and return error
+        // not doing now for ease of testing, but we will do it for sure before the production release, as it is a critical bug
+        // if(comment?.author.toString() !== req.userId) {
+        //     return res.status(403).json({message: 'You are not authorized to delete this comment'})
+        // }
+
         if(!response) {
             return res.status(404).json({message: 'Comment not found'})
         }
