@@ -61,11 +61,9 @@ const CommentComponent = ({ comments, profilePhotoOfCurrentUser, postId, onDelet
     const handleDeleteComment = async (commentId: string) => {
         const response = await apiClient.delete(`/api/posts/delete_comment/${postId}/${commentId}`);
         onDeleteComment(postId, commentId);
-        console.log("halla bol", response)
     }
 
     const singleComment = commentsArray.map((comment: any) => {
-        console.log("super", comment);
         const author = comment.author.name;
         const email = comment.author.email;
         const profilePhoto = comment.author.profilePhoto || '/default.jpg';
@@ -153,7 +151,6 @@ const PostContainer = ({ author, createdAt, caption, mediaUrl, like, comments, _
     const anchorRef = useRef(null);
     const avatarUrl = author?.profilePhoto && author.profilePhot !== '' ? author.profilePhoto :  '/default.jpg'
     const [showComment, setShowComment] = useState(false);
-
 
     const likePost = async () => {
         try {

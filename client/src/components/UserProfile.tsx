@@ -32,6 +32,7 @@ type ProfileForm = {
     bio: string,
     location: string
 }
+
 const profileSchema = {
     name: {
         label: "Name",
@@ -65,11 +66,12 @@ const UserProfile = ({ userInfo, onEditProfile }: userProfileType) => {
         bio: "",
         location: "",
     }))
+
     const coverPhotoFileRef = useRef<HTMLInputElement | null > (null);
     const profilePhotoFileRef = useRef<HTMLInputElement | null > (null);
 
-    const coverPhotoUrl = localCoverPhotoUrl ?? userInfo?.coverPhoto ?? null;
-    const profilePhotoUrl =localProfilePhotoUrl ??  userInfo?.profilePhoto;
+    const coverPhotoUrl = localCoverPhotoUrl !== null ? localCoverPhotoUrl : userInfo?.coverPhoto !== '' ? userInfo?.coverPhoto : '/default-cover.jpg';
+    const profilePhotoUrl = localProfilePhotoUrl!== null ? localProfilePhotoUrl : userInfo?.profilePhoto!== '' ? userInfo?.profilePhoto : '/default.jpg';
 
 
     const handleSave = async () => {

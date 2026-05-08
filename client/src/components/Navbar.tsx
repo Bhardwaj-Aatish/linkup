@@ -5,6 +5,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useRouter } from 'next/navigation';
+import apiClient, { setAccessToken } from '@/lib/axiosInstance';
 
 const Navbar = () => {
   const router = useRouter();
@@ -15,19 +16,25 @@ const Navbar = () => {
 
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    router.push('/login')
+    try {
+      apiClient.post('/api/users/logout')
+    } catch (error) {
+      console.error("Error while logging out", error)
+    } finally {
+      setAccessToken(null);
+      router.push('/login')
+    }
   }
 
   return (
     <nav className={`${navDesktopContainer} ${navMobileContainer} text-white border-t border-border md:flex-2 md:border-r z-100`}>
       <div className="flex flex-row justify-around md:flex md:flex-col md:gap-3">
         <div className={`hidden md:flex items-center p-3 text-3xl mb-3 font-extrabold`}> LinkUp </div>
-        <NavBarItem  className={`${navDesktopItem} ${navMobileItems}`} href="/dashboard" Icon={HomeIcon} label="Home"/> 
-        <NavBarItem  className={`${navDesktopItem} ${navMobileItems}`} href="/message" Icon={LocalPostOfficeIcon} label="Message"/> 
-        <NavBarItem  className={`${navDesktopItem} ${navMobileItems}`} href="/profile" Icon={AccountBoxIcon} label="Profile"/> 
+        <NavBarItem className={`${navDesktopItem} ${navMobileItems}`} href="/dashboard" Icon={HomeIcon} label="Home" />
+        <NavBarItem className={`${navDesktopItem} ${navMobileItems}`} href="/message" Icon={LocalPostOfficeIcon} label="Message" />
+        <NavBarItem className={`${navDesktopItem} ${navMobileItems}`} href="/profile" Icon={AccountBoxIcon} label="Profile" />
       </div>
-      <Button className={`hidden md:flex text-red-500 px-3 py-3 justify-start hover:text-red-500 `} text='Logout' buttonType='tertiary' onClick={handleLogout}/>
+      <Button className={`hidden md:flex text-red-500 px-3 py-3 justify-start hover:text-red-500 `} text='Logout' buttonType='tertiary' onClick={handleLogout} />
     </nav>
   )
 }

@@ -41,7 +41,6 @@ const CreatePost = ({onCreatePost}: any) => {
   }
 
   const handlePost = () => {
-    console.log("working here aatish", images)
     if (postText.trim() || images.length > 0) {
       savePost(postText, images)
       setPostText('');

@@ -16,9 +16,9 @@ const AuthForm: any = ({ buttonText, onSubmit, onRouteChange}: authformProps) =>
   const handleSubmit = (event: any) => {
     event.preventDefault();
     onSubmit(({name, email, password}));
-    setName('')
-    setEmail('')
-    setPassword('')
+    // setName('')
+    // setEmail('')
+    // setPassword('')
   }
 
   return (

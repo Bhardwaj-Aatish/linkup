@@ -20,7 +20,6 @@ const Profile = () => {
         const fetchUserData = async () => {
             const response = await apiClient.get('/api/users/me')
             setUserData(response.data);
-            console.log("working profile", response.data)
         }
         fetchUserData();
     }, [])

@@ -1,5 +1,5 @@
 import express from 'express'
-import { getSelfProfle, signin, signup, modifySelfProfile, fetchAllUser } from '../controllers/userController.js'
+import { getSelfProfle, signin, signup, modifySelfProfile, fetchAllUser, refresh, logout} from '../controllers/userController.js'
 import authMiddleware from '../middleware/authMiddleware.js';
 import uploadFile from '../middleware/multerMiddleware.js';
 
@@ -7,6 +7,9 @@ const userRouter = express.Router();
 
 userRouter.post('/signup', signup)
 userRouter.post('/signin', signin)
+
+userRouter.post('/refresh', refresh)
+userRouter.post('/logout', logout)
 
 userRouter.use(authMiddleware);
 

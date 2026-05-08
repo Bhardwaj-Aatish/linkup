@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import apiClient from '@/lib/axiosInstance'
+import apiClient, { setAccessToken } from '@/lib/axiosInstance'
 import {useRouter } from 'next/navigation'
 import AuthForm from '@/components/AuthForm'
 
@@ -28,7 +28,7 @@ export default function Login() {
       }
 
       const token = response?.data?.token;
-      localStorage.setItem('token', token)
+      setAccessToken(token);
       router.push('/dashboard')
     } catch (e) {
       console.error("not able to signup up", e)

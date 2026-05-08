@@ -14,7 +14,7 @@ const Dashboard = () => {
     useEffect(() =>  {
       const fetchPost = async () => {
         const posts = await apiClient.get('/api/posts/all');
-        setPosts(posts.data.posts)
+        setPosts(posts?.data?.posts)
       }
       fetchPost()
     }, []);
@@ -38,8 +38,6 @@ const Dashboard = () => {
         });
         return updatedPost;
       })
-      console.log("halla bol handle createcomment", comment);
-
     }
 
     // const printPost = (postId: string) => {
